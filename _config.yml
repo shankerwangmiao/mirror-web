@@ -48,7 +48,7 @@ kramdown:
 sass:
     sass_dir: static/css
 
-gems:
+plugins:
     - jekyll-babel
     - jekyll-sitemap
     - jekyll/fontawesome/svg
@@ -56,7 +56,20 @@ gems:
 
 babel_js_extensions: 'es6'
 
+defaults:
+  - scope:
+      path: "_zhelp/*.mdx"
+    values:
+      render_with_liquid: false
+      layout: help2
+
 exclude: [Gemfile, Gemfile.lock, README.md, gen_robot.sh, vendor, geninfo/, gen_robot.sh, gen_desc.py, Dockerfile*]
+
+collections:
+  posts:
+    output: true
+  zhelp:
+    output: true
 
 sponsors:
     megvii:

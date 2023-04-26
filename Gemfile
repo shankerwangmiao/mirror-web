@@ -1,5 +1,6 @@
 source 'https://mirrors.tuna.tsinghua.edu.cn/rubygems/'
-gem 'github-pages'
+gem 'jekyll'
 gem 'jekyll-babel'
 gem 'jekyll-fontawesome-svg'
 gem 'jekyll-minifier'
+gem 'jekyll-sitemap'

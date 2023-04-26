@@ -1,0 +1,16 @@
+---
+permalink: /zhelp/
+---
+<!DOCTYPE html>
+<html>
+<script>
+{% assign zhelps = site.collections | where: 'label', 'zhelp' | first %}
+{% assign first_help = zhelps.docs | sort: "cname" | first %}
+var redirect_to = window.location.protocol + "//" + window.location.host + "{{first_help.url}}";
+window.location = redirect_to;
+</script>
+
+</html>
+<!--
+vim: ts=2 sts=2 sw=2 noexpandtab
+-->
