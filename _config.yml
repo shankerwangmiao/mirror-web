@@ -62,7 +62,7 @@ defaults:
     values:
       render_with_liquid: false
       layout: help
-      permalink: /help/:name/
+      permalink: /help/:title/
 
 exclude: [Gemfile, Gemfile.lock, README.md, gen_robot.sh, vendor, geninfo/, gen_robot.sh, gen_desc.py, Dockerfile*]
 
