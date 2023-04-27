@@ -1,4 +1,9 @@
 {
 "options": {{ site.data.options | jsonify }},
-"helps": {{ site.categories['help'] | select: "mirrorid", "url" | jsonify }}
+{% assign zhelps = site.collections | where: 'label', 'zhelp' | first -%}
+"helps": [
+{%- for help in zhelps.docs -%}
+{"mirrorid": {{ help.cname | jsonify }},"url": {{ help.url  | jsonify  }}}
+{%- unless forloop.last %},{% endunless -%}
+{%- endfor %}]
 }

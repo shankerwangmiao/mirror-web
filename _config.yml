@@ -61,7 +61,8 @@ defaults:
       path: "_zhelp/*.mdx"
     values:
       render_with_liquid: false
-      layout: help2
+      layout: help
+      permalink: /help/:name/
 
 exclude: [Gemfile, Gemfile.lock, README.md, gen_robot.sh, vendor, geninfo/, gen_robot.sh, gen_desc.py, Dockerfile*]
 

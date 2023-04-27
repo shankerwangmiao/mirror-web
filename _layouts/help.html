@@ -1,30 +1,27 @@
 <!DOCTYPE html>
 <html>
-{% capture metaDesc %}{{ page.mirrorid }} 使用帮助{% endcapture %}
+{% capture metaDesc %}{{ page.cname }} 使用帮助{% endcapture %}
 	{% include head.html cattitle="镜像站使用帮助" metaDesc=metaDesc %}
 <body>
 	{% include nav.html %}
 
+{% assign zhelps = site.collections | where: 'label', 'zhelp' | first %}
 {% if page.redirect_help_id %}
-{% assign redirect_to_page = site.categories["help"] | where_exp:"p", "p.mirrorid == page.redirect_help_id" %}
+{% assign redirect_to_page = zhelps.docs | where_exp:"p", "p.cname == page.redirect_help_id" %}
 <script>
 	var redirect_to = window.location.protocol + "//" + window.location.host + "{{redirect_to_page[0].url}}";
 	window.location = redirect_to;
 </script>
 {% endif %}
 
-<script>
-	window.mirrorId = "{{page.mirrorid}}";
-</script>
-
-{% assign help_pages = site.categories["help"] | sort: 'mirrorid' %}
+{% assign help_pages = zhelps.docs | sort: 'cname' %}
 <div id="help-page">
 	<div class="container">
 	  <div class="row">
 		  <div class="col-sm-2 hidden-xs">
 				<ul class="nav nav-pills nav-stacked" id="help-nav">
 					{% for h in help_pages %}
-					<li{% if h.mirrorid == page.mirrorid or h.redirect_help_id == page.mirrorid %} class="active"{%endif%} id="toc-{{h.mirrorid}}"><a href="{{h.url}}">{{h.mirrorid}}</a></li>
+					<li{% if h.cname == page.cname or h.redirect_help_id == page.cname %} class="active"{%endif%} id="toc-{{h.cname}}"><a href="{{h.url}}">{{h.cname}}</a></li>
 					{% endfor %}
 				</ul>
 			</div><!-- sidenave -->
@@ -35,13 +32,28 @@
 							<label>选择帮助条目: </label>
 							<select class="form-control" id="help-select">
 								{% for h in help_pages %}
-								<option data-help-url="{{h.url}}"{% if h.mirrorid == page.mirrorid%} selected{%endif%} id="toc-{{h.mirrorid}}">{{h.mirrorid}}</option>
+								<option data-help-url="{{h.url}}"{% if h.cname == page.cname%} selected{%endif%} id="toc-{{h.cname}}">{{h.cname}}</option>
 								{% endfor %}
 							</select>
 						</div>
 					</form>
 				</div>
 				<div id="help-content">
+					<h1>{{ page.title }}</h1>
+					<span class="form-group form-inline">
+						<label for="http-select">是否使用 HTTPS</label>
+						<select id="http-select" class="form-control content-select" v-model="http_protocol">
+							<option value="https://" selected>是</option>
+							<option value="http://">否</option>
+						</select>
+					</span>
+					<span class="form-group form-inline">
+						<label for="sudo-select">是否使用 sudo</label>
+						<select id="sudo-select" class="form-control content-select" v-model="sudo">
+							<option value="sudo " selected>是</option>
+							<option value="">否</option>
+						</select>
+					</span>
 					{{ content }}
 				</div>
 			</div><!-- help content -->
@@ -52,7 +64,7 @@
 	{% include footer.html %}
 </body>
 
-<script src="/static/js/highlight.min.js?{{ site.data['hash'] }}"></script>
+<input type="hidden" value="{{site.hostname}}/{{page.cname}}" data-mirror-id="{{page.cname}}" id="data-mirror">
 <script src="/static/js/help.js?{{ site.data['hash'] }}"></script>
 
 </html>
