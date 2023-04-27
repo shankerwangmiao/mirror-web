@@ -9,21 +9,10 @@ const helpContent = new Vue({
 		"http_protocol": "https://",
 		"sudo": "sudo ",
 		"mirror": document.getElementById("data-mirror").value,
-		"selected": {},
 	},
 	computed: {
 		"sudoE": ()=>this.sudo == "sudo " ? "sudo -E " : "",
 	},
-	methods: {
-		updateSelected: function(){
-			for(let i in this.selected){
-				this.$data[i] = this.selected[i];
-			}
-		}
-	},
-	watch: {
-		"selected": "updateSelected",
-	}
 });
 
 let totalCodeBlock = 0;
@@ -32,10 +21,6 @@ Vue.component('code-block', {
 	props: {
 		menus: Array,
 		selected: Object,
-	},
-	model: {
-		prop: "selected",
-		event: "change",
 	},
 	data: (thisComponent) => ({
 		selection: thisComponent.menus ? thisComponent.menus.map(()=>0) : {},
@@ -52,7 +37,6 @@ Vue.component('code-block', {
 				}
 			}
 			this.selected = selected;
-			this.$emit('change', this.selected);
 		},
 	},
 	watch: {
@@ -73,7 +57,6 @@ Vue.component('code-block', {
 			</span>
 		</div>
 		<slot v-bind=selected></slot>
-		<div>{{JSON.stringify(selection)}} {{JSON.stringify(selected)}} {{JSON.stringify(blockId)}}</div>
 		</div>
 	`,
 	{% endraw %}
@@ -94,13 +77,13 @@ $(document).ready(() => {
 		globalOptions.unlisted_mirrors.forEach(elem => {
 			availableMirrorIds.add(elem.name)
 		});
-		console.log(window.mirrorId);
-		if (!availableMirrorIds.has(window.mirrorId)) {
-			if ({{ site.hide_mirrorz }}) {
-				location.href = "/404-help-hidden.html"; // this will break 404 issue submission
-			} else {
-				location.href = "{{ site.mirrorz_help_link }}" + window.mirrorId; // TODO: convert this to mirrorz cname
-			}
+		let mirrorId = document.getElementById("data-mirror").attributes["data-mirror-id"].value;
+		if (!availableMirrorIds.has(mirrorId)) {
+			{% if site.hide_mirrorz %}
+			location.href = "/404-help-hidden.html"; // this will break 404 issue submission
+			{% else %}
+			location.href = "{{ site.mirrorz_help_link }}" + mirrorId; // TODO: convert this to mirrorz cname
+			{% endif %}
 		}
 
 		$('li').filter((_, node) => node.id && node.id.startsWith("toc-") && !availableMirrorIds.has(node.id.slice(4))).remove();
