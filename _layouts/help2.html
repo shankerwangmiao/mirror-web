@@ -36,7 +36,7 @@
 							<label>选择帮助条目: </label>
 							<select class="form-control" id="help-select">
 								{% for h in help_pages %}
-								<option data-help-url="{{h.url}}"{% if h.mirrorid == page.cname%} selected{%endif%} id="toc-{{h.cname}}">{{h.cname}}</option>
+								<option data-help-url="{{h.url}}"{% if h.cname == page.cname%} selected{%endif%} id="toc-{{h.cname}}">{{h.cname}}</option>
 								{% endfor %}
 							</select>
 						</div>
@@ -44,6 +44,20 @@
 				</div>
 				<div id="help-content">
 					<h1>{{ page.title }}</h1>
+					<span class="form-group form-inline">
+						<label for="http-select">是否使用 HTTPS</label>
+						<select id="http-select" class="form-control content-select" v-model="http_protocol">
+							<option value="https://" selected>是</option>
+							<option value="http://">否</option>
+						</select>
+					</span>
+					<span class="form-group form-inline">
+						<label for="sudo-select">是否使用 sudo</label>
+						<select id="sudo-select" class="form-control content-select" v-model="sudo">
+							<option value="sudo " selected>是</option>
+							<option value="">否</option>
+						</select>
+					</span>
 					{{ content }}
 				</div>
 			</div><!-- help content -->
@@ -54,7 +68,8 @@
 	{% include footer.html %}
 </body>
 
-<script src="/static/js/help.js?{{ site.data['hash'] }}"></script>
+<input type="hidden" value="{{site.hostname}}/{{page.cname}}" id="data-mirror">
+<script src="/static/js/help2.js?{{ site.data['hash'] }}"></script>
 
 </html>
 <!--
