@@ -20,4 +20,4 @@ group :jekyll_plugins do
     gem 'jekyll-minifier', '~> 0.1.10'
 end
 
-gem 'vite_ruby', '~> 3.2'
+gem 'vite_ruby', '~> 3.10'
