@@ -250,12 +250,18 @@ export default defineConfig(({ mode }) => ({
                 preserveEntrySignatures: "strict",
               },
             },
-            esbuild: false,
+            oxc: false,
           });
           const outputs = Array.isArray(res) ? res : [res];
+          const self = this;
           outputs.forEach((output) => {
             output.output.forEach((chunk) => {
-              bundle[chunk.fileName] = chunk;
+              chunk.type === "chunk" &&
+                self.emitFile({
+                  type: "asset",
+                  fileName: chunk.fileName,
+                  source: chunk.code,
+                });
             });
           });
         },

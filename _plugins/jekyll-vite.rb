@@ -43,6 +43,11 @@ class Jekyll::Vite::Generator < Jekyll::Generator
       build_cache_dir: File.join(cache_dir, 'vite-build'),
       **(site.config['vite'].transform_keys(&:to_sym) || {})
     )
+    unless ENV.key?('VITE_RUBY_VITE_BIN_PATH')
+      vr.configure(
+        vite_bin_path: 'node_modules/.bin/vite'
+      )
+    end
     site.reader.read_data
     exports = [
       { :name => 'site_config', :data => site.config },
@@ -277,4 +282,16 @@ end
   'vite_react_refresh_tag' => Jekyll::Vite::ReactRefreshTag,
 }.each do |name, tag|
   Liquid::Template.register_tag(name, tag)
+end
+
+unless Enumerable.method_defined?(:filter_map)
+  module Enumerable
+    def filter_map
+      return to_enum(:filter_map) unless block_given?
+      each_with_object([]) do |element, result|
+        res = yield(element)
+        result << res if res
+      end
+    end
+  end
 end
